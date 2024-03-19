@@ -25,10 +25,10 @@ if ($_POST) {
             }
         }
 
-        $arrResponse = array("success" => "", "status" => "", "msg" => "");
+        $arrResponse = array("success" => TRUE, "status" => "1", "msg" => "Guardado Correcto.");
 
     } catch (Exception $e) {
-        $arrResponse = array("error" => "", "status" => "", "msg" => "");
+        $arrResponse = array("error" => false, "status" => "0", "msg" => " Error, por favor intételo de nuevo.");
     }
   
 

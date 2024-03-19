@@ -90,7 +90,7 @@ if ($_SESSION['info']) {
 
                 <div class="table-responsive">
 
-                  <form action="contarGeneral.php" method="post" enctype="multipart/form-data">
+                
 
                     <table class="table align-items-center mb-0" id="table">
                       <thead>
@@ -119,7 +119,7 @@ if ($_SESSION['info']) {
                             <td>
                               <h6 class="mb-0 text-sm"><?= strtolower($value['PDT_DESCRIPCION']) ?></h6>
                             </td>
-                            <input type="hidden" step="0.01" name="conteo_reflex[]" id="conteo" class="form-control copy-reflex" style="padding-left: 20px !important;" min="0" placeholder="<?= $value['MIN_FIS_CONTEO'] ?>" >
+                            <input type="hidden" step="0.01" name="conteo_reflex[]" id="conteo" class="form-control copy-reflex" style="padding-left: 20px !important;" min="0" placeholder="<?= $value['MIN_FIS_CONTEO'] ?>">
                             <input type="hidden" name="id_reflex[]" value="<?= $value['MIN_ID'] ?>">
 
                             <form action="contar.php" method="post" onsubmit="return confirmation()">
@@ -147,8 +147,11 @@ if ($_SESSION['info']) {
 
                       </tbody>
                     </table>
-                      <button class="btn btn-success "  id="btn-massive"> Guardar</button>
-                  </form>
+                    <div class="d-flex justify-content-center">
+                      <button class="btn btn-info " id="btn-massive"> Guardar</button>
+
+                    </div>
+                 
                 </div>
                 </p>
               </div>
@@ -195,76 +198,74 @@ if ($_SESSION['info']) {
 
 
         document.getElementById('btn-massive').addEventListener('click', function(e) {
-e.preventDefault();
+          e.preventDefault();
 
           let conteo_reflex = document.querySelectorAll('input[name="conteo_reflex[]"]');
           let din_reflex = document.querySelector('input[name="din"]');
           let id_reflex = document.querySelectorAll('input[name="id_reflex[]"]');
           let data = new FormData();
 
-
-          
-          
-          // Crear un array para almacenar los valores
           var valores = [];
-         
-          
-          // Iterar sobre cada input y agregar su valor al array
-          conteo_reflex.forEach(function(input,index) {
-            
-            if(input.value !== ''){
-              
-              data.append('conteo[]',input.value);
-              data.append('din',din_reflex.value);
-              data.append('id[]',id_reflex[index].value);
-            
+
+
+          conteo_reflex.forEach(function(input, index) {
+
+            if (input.value !== '') {
+
+              data.append('conteo[]', input.value);
+              data.append('din', din_reflex.value);
+              data.append('id[]', id_reflex[index].value);
+
             }
           });
 
 
 
-          
-					var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-					var ajaxUrl ="contarGeneral.php";
-					request.open("POST", ajaxUrl, true);
-					request.send(data);
-					request.onreadystatechange = function () {
-						if (request.readyState != 4) return;
-						if (request.status == 200) {
-							var responseText = request.responseText;
 
-							console.log(request.responseText);
-							responseText = responseText.replace(/^\s+/, '');
-							var objData = responseText;
-							if (objData.status) {
+          var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+          var ajaxUrl = "contarGeneral.php";
+          request.open("POST", ajaxUrl, true);
+          request.send(data);
+          request.onreadystatechange = function() {
+            if (request.readyState != 4) return;
+            if (request.status == 200) {
+              var responseText = JSON.parse(request.responseText);
 
-								console.log(objData);
-								
-							} else {
-								Swal.fire("Atención", objData.msg, "error");
-							}
-						} else {
-							Swal.fire("Atención", "Error en el proceso", "error");
-						}
-						divLoading.style.display = "none";
-						return false;
-					};
+              console.log(responseText.status);
+              console.log(responseText);
+              //responseText = responseText.replace(/^\s+/, '');
+              var objData = responseText;
+              if (objData.status) {
+
+                //  Swal.fire("Excelente", objData.msg, "success");
+
+                window.location.reload();
+
+              } else {
+                Swal.fire("Atención", objData.msg, "error");
+              }
+            } else {
+              Swal.fire("Atención", "Error en el proceso", "error");
+            }
+            divLoading.style.display = "none";
+            return false;
+          };
 
 
         });
 
 
 
-     
 
 
 
 
-    
+
+
 
       });
 
-   
+
 
       <?php if ($_SESSION['info']) { ?>
         swal("Exito!", "<?= $_SESSION['info'] ?>", "success");
