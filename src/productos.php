@@ -89,61 +89,66 @@ if ($_SESSION['info']) {
                 </form>
 
                 <div class="table-responsive">
-                  <table class="table align-items-center mb-0" id="table">
-                    <thead>
-                      <tr>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Código</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Descripcion</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cantidad</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Procesar</th>
-                      </tr>
-                    </thead>
-                    <tbody>
 
-                      <?php foreach ($listaProductos as $key => $value) { ?>
+                  <form action="contarGeneral.php" method="post" enctype="multipart/form-data">
 
+                    <table class="table align-items-center mb-0" id="table">
+                      <thead>
                         <tr>
-                          <td>
-                            <div class="d-flex px-2 py-1">
-                              <div>
-                                <!-- <i style="color: green;" class="fa-solid fa-circle-check"></i>&nbsp;&nbsp; -->
-                              </div>
-                              <div class="d-flex flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm"><?= $value['PDT_CODIGO'] ?></h6>
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <h6 class="mb-0 text-sm"><?= strtolower($value['PDT_DESCRIPCION']) ?></h6>
-                          </td>
+                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Código</th>
+                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Descripcion</th>
+                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cantidad</th>
+                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Procesar</th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                          <input type="hidden" step="0.01" name="conteo" id="conteo" class="form-control" style="padding-left: 20px !important;" min="0" placeholder="<?= $value['MIN_FIS_CONTEO'] ?>" required>
-                          <form action="contar.php" method="post" onsubmit="return confirmation()">
-                            <td class="align-middle text-center text-sm">
-                              <div class="input-group">
+                        <?php foreach ($listaProductos as $key => $value) { ?>
 
-                                <input onkeypress="copy()" type="number" step="0.01" name="conteo" id="conteo" class="form-control copy" style="padding-left: 20px !important;" min="0" placeholder="<?= $value['MIN_FIS_CONTEO'] ?>" required>
-
+                          <tr>
+                            <td>
+                              <div class="d-flex px-2 py-1">
+                                <div>
+                                  <!-- <i style="color: green;" class="fa-solid fa-circle-check"></i>&nbsp;&nbsp; -->
+                                </div>
+                                <div class="d-flex flex-column justify-content-center">
+                                  <h6 class="mb-0 text-sm"><?= $value['PDT_CODIGO'] ?></h6>
+                                </div>
                               </div>
                             </td>
-                            <td class="align-middle text-center text-sm">
-                              <input type="hidden" name="din" value="<?= $din ?>">
-                              <input type="hidden" name="search" value="<?= $search ?>">
-                              <input type="hidden" name="id" value="<?= $value['MIN_ID'] ?>">
-                              <?php if ($value['MIN_FIS_CONTEO'] == 0) { ?>
-                                <button type="submit" class="btn btn-outline-success" style="margin: auto;" type="button" id="">Contar</button>
-                              <?php } else { ?>
-                                <button type="submit" class="btn btn-success" style="margin: auto;" type="button" id="<?= $value['MIN_ID'] ?>">Contado</button>
-                              <?php } ?>
-                          </form>
+                            <td>
+                              <h6 class="mb-0 text-sm"><?= strtolower($value['PDT_DESCRIPCION']) ?></h6>
+                            </td>
+                            <input type="hidden" step="0.01" name="conteo_reflex[]" id="conteo" class="form-control copy-reflex" style="padding-left: 20px !important;" min="0" placeholder="<?= $value['MIN_FIS_CONTEO'] ?>" >
+                            <input type="hidden" name="id_reflex[]" value="<?= $value['MIN_ID'] ?>">
 
-                          </td>
-                        </tr>
+                            <form action="contar.php" method="post" onsubmit="return confirmation()">
+                              <td class="align-middle text-center text-sm">
+                                <div class="input-group">
+                                  <input type="number" step="0.01" name="conteo" id="conteo" class="form-control copy" style="padding-left: 20px !important;" min="0" placeholder="<?= $value['MIN_FIS_CONTEO'] ?>" required>
 
-                      <?php } ?>
+                                </div>
+                              </td>
+                              <td class="align-middle text-center text-sm">
+                                <input type="hidden" name="din" value="<?= $din ?>">
+                                <input type="hidden" name="search" value="<?= $search ?>">
+                                <input type="hidden" name="id" value="<?= $value['MIN_ID'] ?>">
+                                <?php if ($value['MIN_FIS_CONTEO'] == 0) { ?>
+                                  <button type="submit" class="btn btn-outline-success" style="margin: auto;" type="button" id="">Contar</button>
+                                <?php } else { ?>
+                                  <button type="submit" class="btn btn-success" style="margin: auto;" type="button" id="<?= $value['MIN_ID'] ?>">Contado</button>
+                                <?php } ?>
+                            </form>
 
-                    </tbody>
-                  </table>
+                            </td>
+                          </tr>
+
+                        <?php } ?>
+
+                      </tbody>
+                    </table>
+                      <button class="btn btn-success "  id="btn-massive"> Guardar</button>
+                  </form>
                 </div>
                 </p>
               </div>
@@ -165,49 +170,101 @@ if ($_SESSION['info']) {
     ?>
 
     <script type="text/javascript">
-
-      $(document).ready(function(){
-
-        $("#table-new").on('click', 'tr', function(e) {
-
-
-
-        } );
-
-
-
-
-
-      });
       function confirmation() {
         if (!confirm("Realmente desea registrar conteo?")) return false;
       }
 
       document.addEventListener('DOMContentLoaded', function() {
-        var tabla = document.getElementById('table');
 
 
-        var fila = tabla.getElementsByTagName('tr');
+        var conteoInputs = document.querySelectorAll('.copy');
+        conteoInputs.forEach(function(input) {
+          input.addEventListener('input', function() {
+
+            let fila = this.closest('tr');
+            let copy_value = fila.querySelector('.copy-reflex');
+            let valor = this.value;
+
+            copy_value.value = valor;
+            console.log(copy_value);
+
+
+
+          });
+        });
+
+
+        document.getElementById('btn-massive').addEventListener('click', function(e) {
+e.preventDefault();
+
+          let conteo_reflex = document.querySelectorAll('input[name="conteo_reflex[]"]');
+          let din_reflex = document.querySelector('input[name="din"]');
+          let id_reflex = document.querySelectorAll('input[name="id_reflex[]"]');
+          let data = new FormData();
+
+
+          
+          
+          // Crear un array para almacenar los valores
+          var valores = [];
+         
+          
+          // Iterar sobre cada input y agregar su valor al array
+          conteo_reflex.forEach(function(input,index) {
+            
+            if(input.value !== ''){
+              
+              data.append('conteo[]',input.value);
+              data.append('din',din_reflex.value);
+              data.append('id[]',id_reflex[index].value);
+            
+            }
+          });
+
+
+
+          
+					var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+					var ajaxUrl ="contarGeneral.php";
+					request.open("POST", ajaxUrl, true);
+					request.send(data);
+					request.onreadystatechange = function () {
+						if (request.readyState != 4) return;
+						if (request.status == 200) {
+							var responseText = request.responseText;
+
+							console.log(request.responseText);
+							responseText = responseText.replace(/^\s+/, '');
+							var objData = responseText;
+							if (objData.status) {
+
+								console.log(objData);
+								
+							} else {
+								Swal.fire("Atención", objData.msg, "error");
+							}
+						} else {
+							Swal.fire("Atención", "Error en el proceso", "error");
+						}
+						divLoading.style.display = "none";
+						return false;
+					};
+
+
+        });
+
 
 
      
 
-        console.log(fila.length);
-        console.log(fila[2].cells[2].addEventListener( "click", function(value){
-        alert('hola');
 
-        console.log(this);
-        }));
+
+
+    
 
       });
 
-      function copy() {
-
-        let data = $(this).find('.copy');
-
-        console.log(data);
-
-      }
+   
 
       <?php if ($_SESSION['info']) { ?>
         swal("Exito!", "<?= $_SESSION['info'] ?>", "success");
